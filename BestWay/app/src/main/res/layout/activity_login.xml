@@ -9,4 +9,60 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.esgi.ecole.bestway.activities.LoginActivity">
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="88dp"
+        android:hint="Email" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/editText2"
+        android:layout_below="@+id/editText"
+        android:layout_centerHorizontal="true"
+        android:hint="Password" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connexion"
+        android:id="@+id/buttonConnexion"
+        android:layout_centerVertical="true"
+        android:background="#689F38"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_alignEnd="@+id/editText2"
+        android:layout_alignStart="@+id/editText2"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="facebook"
+        android:id="@+id/button2"
+        android:layout_above="@+id/button3"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="#ffffff"
+        android:background="#0D47A1"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="google"
+        android:id="@+id/button3"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/button2"
+        android:textColor="#ffffff"
+        android:background="#C62828" />
 </RelativeLayout>
