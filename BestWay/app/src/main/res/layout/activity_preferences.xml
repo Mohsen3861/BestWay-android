@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="com.esgi.ecole.bestway.activities.PreferencesActivity">
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageViewCarSelect"
+        android:src="@drawable/car_unselect"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageViewMetroSelect"
+        android:src="@drawable/metro_unselect"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageViewBusSelect"
+        android:src="@drawable/bus_unselect"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="15dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageViewWalkSelect"
+        android:src="@drawable/walk_unselect"
+        android:layout_below="@+id/imageViewCarSelect"
+        android:layout_alignEnd="@+id/imageViewCarSelect"
+        android:layout_marginLeft="15dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageViewBikeSelect"
+        android:src="@drawable/bike_unselect"
+        android:layout_alignTop="@+id/imageViewWalkSelect"
+        android:layout_alignStart="@+id/imageViewMetroSelect" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Terminer"
+        android:id="@+id/buttonTerminer"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:background="#689F38"
+        android:textColor="#ffffff"
+        android:textSize="20dp" />
+</RelativeLayout>

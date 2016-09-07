@@ -80,7 +80,7 @@
         android:layout_width="35dp"
         android:layout_height="30dp"
         android:layout_alignTop="@+id/editText3"
-        android:layout_toEndOf="@+id/button"
+        android:layout_toEndOf="@+id/buttonGo"
         android:layout_above="@+id/editText4" />
 
     <EditText
@@ -98,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GO !"
-        android:id="@+id/button"
+        android:id="@+id/buttonGo"
         android:layout_below="@+id/editText4"
         android:layout_marginTop="44dp"
         android:layout_alignEnd="@+id/editText4"
