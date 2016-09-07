@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">BestWay</string>
+    <string name="home_page_title">Comment j\'y vais ?</string>
+    <string name="classement_temps">Temps</string>
+    <string name="classement_ecologie">Ecologie</string>
+    <string name="classement_pratique">Pratique</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
