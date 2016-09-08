@@ -137,7 +137,7 @@ public class PreferencesActivity extends AppCompatActivity{
 
                 Log.e("choices" , choices.toString());
                 Intent i = new Intent(PreferencesActivity.this , MainActivity.class);
-                //startActivity(i);
+                startActivity(i);
             }
         });
 

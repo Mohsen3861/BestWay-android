@@ -9,6 +9,11 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBwTQn3nShmP_8SrVsouvrb0ZcrJ8tlKmY"/>
+        
         <activity android:name=".activities.MainActivity"></activity>
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
