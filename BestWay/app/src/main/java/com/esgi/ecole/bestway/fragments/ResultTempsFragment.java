@@ -2,6 +2,7 @@ package com.esgi.ecole.bestway.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.esgi.ecole.bestway.adapters.ResultAdapter;
 import com.esgi.ecole.bestway.models.Trajet;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by mohsen raeisi on 07/09/2016.
@@ -46,22 +49,19 @@ public class ResultTempsFragment extends Fragment {
     }
 
     public void populateList(){
+       ArrayList<Trajet> trajets =  getArguments().getParcelableArrayList("trajets");
 
-        Trajet trajet1 = new Trajet("20 mn" , 3);
-        Trajet trajet2 = new Trajet("25 mn" , 4);
-        Trajet trajet3 = new Trajet("25 mn" , 5);
-        Trajet trajet4 = new Trajet("30 mn" , 2);
-        Trajet trajet5 = new Trajet("45 mn" , 1);
-
-        ArrayList<Trajet> trajetsList = new ArrayList<>();
-        trajetsList.add(trajet1);
-        trajetsList.add(trajet2);
-        trajetsList.add(trajet3);
-        trajetsList.add(trajet4);
-        trajetsList.add(trajet5);
+        if (trajets != null) {
+            Collections.sort(trajets, new Comparator<Trajet>() {
+                @Override
+                public int compare(Trajet t1, Trajet t2) {
+                    return t1.getDurationIndex() - t2.getDurationIndex();
+                }
+            });
+        }
 
         adapter = new ResultAdapter(getContext());
-        adapter.addItemsCollection(trajetsList);
+        adapter.addItemsCollection(trajets);
 
         resultListView.setAdapter(adapter);
 

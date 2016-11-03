@@ -1,8 +1,6 @@
 package com.esgi.ecole.bestway.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,35 +13,44 @@ import com.esgi.ecole.bestway.R;
 import com.esgi.ecole.bestway.commun.BestWayClient;
 import com.esgi.ecole.bestway.commun.Utils;
 import com.esgi.ecole.bestway.models.Session;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class LoginActivity extends AppCompatActivity {
+public class InscriptionActivity extends AppCompatActivity {
 
-    public  Button connexionButton;
-    public  Button inscriptionButton;
     private EditText emailEditText;
     private EditText passwordEditText;
+    private Button validerButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_inscription);
+
+        setTitle(getString(R.string.inscriptionTitle));
 
         assignViews();
 
-        connexionButton.setOnClickListener(new View.OnClickListener() {
+
+
+        validerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(emailEditText.getText() != null && !emailEditText.getText().toString().isEmpty() &&
-                        passwordEditText.getText() != null && !passwordEditText.getText().toString().isEmpty()){
+                        passwordEditText.getText() != null && !passwordEditText.getText().toString().isEmpty()
+                        ){
                     if(Utils.isValidEmailAddress(emailEditText.getText().toString()))
-                     login();
+                         registerUser();
                     else {
                         Snackbar snackbar = Snackbar
                                 .make(v, "Veuillez saisir une adresse email valide", Snackbar.LENGTH_LONG);
@@ -51,39 +58,46 @@ public class LoginActivity extends AppCompatActivity {
                         snackbar.show();
                     }
 
-                }else {
+
+                }else{
                     Snackbar snackbar = Snackbar
                             .make(v, "Veuillez remplir tous les champs", Snackbar.LENGTH_LONG);
 
                     snackbar.show();
                 }
-
             }
         });
 
-        inscriptionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(LoginActivity.this , InscriptionActivity.class);
-                startActivity(i);
-            }
-        });
     }
 
-    public void assignViews(){
-        connexionButton = (Button) findViewById(R.id.buttonConnexion);
-        inscriptionButton = (Button) findViewById(R.id.buttonInscription);
+    private void assignViews(){
         emailEditText = (EditText) findViewById(R.id.editTextEmail);
-        passwordEditText =(EditText) findViewById(R.id.editTextPassword);
+        passwordEditText =(EditText) findViewById(R.id.editTextMdp);
+        validerButton = (Button) findViewById(R.id.buttonValider);
     }
 
 
-    public void login(){
+    /*
 
+    {
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0Nzg1NjIzMjQzMjV9.2c8d5Sm_wMAYm1-5KA1LznKmztB4PIHykNXeHt19n1c",
+  "expires": 1478562324325,
+  "user": {
+    "__v": 0,
+    "email": "aaa@gmail.com",
+    "password": "aaa",
+    "_id": "5817d7940fd4390001055bdf"
+  }
+}
+
+
+     */
+    private void registerUser(){
         String email = emailEditText.getText().toString();
         String mdp = passwordEditText.getText().toString();
 
-        String url = BestWayClient.BASE_URL + BestWayClient.LOGIN;
+       // BestWayClient.post();
+        String url = BestWayClient.BASE_URL + BestWayClient.REGISTER;
 
         RequestParams params = new RequestParams();
         params.add("email",email);
@@ -97,17 +111,12 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     session.setToken(response.getString("token"));
                     session.setUserId(response.getJSONObject("user").getString("_id"));
-                    Log.e("Success",session.getToken() + " userId : " + session.getUserId());
+                  //  Log.e("Success",session.getToken() + " userId : " + session.getUserId());
 
-                    BestWayClient.saveSession(LoginActivity.this,session);
+                    BestWayClient.saveSession(InscriptionActivity.this,session);
 
-                    if(getChoices()== null || getChoices().isEmpty()) {
-                        Intent i = new Intent(LoginActivity.this, PreferencesActivity.class);
-                        startActivity(i);
-                    }else{
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(i);
-                    }
+                    Intent i = new Intent(InscriptionActivity.this , PreferencesActivity.class);
+                    startActivity(i);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -125,9 +134,21 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+/*
+    public static String parseTrafficResponse(JSONObject response){
 
-    public String getChoices() {
-        SharedPreferences prefs = getSharedPreferences("Choices", Context.MODE_PRIVATE);
-        return prefs.getString("Choices", null);
+        try {
+            JSONObject resp = response.getJSONObject("response");
+            if(resp!=null){
+                traffic.setLine(resp.getString("line"));
+                traffic.setStatus(resp.getString("slug"));
+                traffic.setTitle(resp.getString("title"));
+                traffic.setMessage(resp.getString("message"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return traffic;
     }
+    */
 }

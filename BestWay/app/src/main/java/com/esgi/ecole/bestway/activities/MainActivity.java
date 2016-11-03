@@ -2,22 +2,29 @@ package com.esgi.ecole.bestway.activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.esgi.ecole.bestway.R;
+import com.esgi.ecole.bestway.models.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -40,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     EditText arriveEditText;
     ImageView locationImage;
 
+    String dep ="";
+    String arr ="";
     public static String TAG = "GOOGLE PLACES";
 
     private static final int REQUEST_CODE_AUTOCOMPLETE_DEPART = 1;
@@ -55,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         setContentView(R.layout.activity_main);
         setTitle(getString(R.string.home_page_title));
 
+        //focus out editText when activity starts
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
          mGoogleApiClient = new GoogleApiClient.Builder(MainActivity.this)
                 .addApi(Places.GEO_DATA_API)
@@ -67,24 +78,42 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            if(arr != null && !arr.isEmpty() && !dep.isEmpty() && dep != null) {
                 Intent i = new Intent(MainActivity.this, ResulatActivity.class);
+                i.putExtra("arr", arr);
+                i.putExtra("dep", dep);
+                i.putExtra("choices", getChoices());
                 startActivity(i);
+            }else{
+                Snackbar snackbar = Snackbar
+                        .make(v, "Veuillez remplir tous les champs", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+            }
+
             }
         });
 
-        departEditText.setOnClickListener(new View.OnClickListener() {
+
+        departEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
                 openAutocompleteActivity(REQUEST_CODE_AUTOCOMPLETE_DEPART);
+
             }
         });
 
-        arriveEditText.setOnClickListener(new View.OnClickListener() {
+        arriveEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
                 openAutocompleteActivity(REQUEST_CODE_AUTOCOMPLETE_ARRIVE);
+
             }
         });
+
 
         locationImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,26 +143,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // Check that the result was from the autocomplete widget.
         if (requestCode == REQUEST_CODE_AUTOCOMPLETE_DEPART) {
 
-            // Get the user's selected place from the Intent.
-            Place place = PlaceAutocomplete.getPlace(this, data);
-            Log.i(TAG, "Place Selected: " + place.getName());
+            if(resultCode ==  RESULT_OK) {
+                // Get the user's selected place from the Intent.
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i(TAG, "Place Selected: " + place.getLatLng().toString());
 
+                dep = place.getLatLng().latitude+","+place.getLatLng().longitude;
+                // Format the place's details and display them in the TextView.
+                departEditText.setText(place.getAddress());
 
-            // Format the place's details and display them in the TextView.
-            departEditText.setText(place.getAddress());
-
+            }
         }
 
         if (requestCode == REQUEST_CODE_AUTOCOMPLETE_ARRIVE) {
-            //if (resultCode == RESULT_OK) {
-            // Get the user's selected place from the Intent.
-            Place place = PlaceAutocomplete.getPlace(this, data);
-            Log.i(TAG, "Place Selected: " + place.getName());
+            if (resultCode == RESULT_OK) {
+                // Get the user's selected place from the Intent.
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i(TAG, "Place Selected: " + place.getName());
 
+                arr = place.getLatLng().latitude+","+place.getLatLng().longitude;
 
-            // Format the place's details and display them in the TextView.
-            arriveEditText.setText(place.getAddress());
-
+                // Format the place's details and display them in the TextView.
+                arriveEditText.setText(place.getAddress());
+            }
 
         }
     }
@@ -191,8 +223,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-
-
     }
 
     @Override
@@ -200,6 +230,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onDestroy();
         mGoogleApiClient.stopAutoManage(this);
         mGoogleApiClient.disconnect();
+    }
+
+
+    public String getChoices() {
+        SharedPreferences prefs = getSharedPreferences("Choices", Context.MODE_PRIVATE);
+        return prefs.getString("Choices", null);
     }
 
     @Override

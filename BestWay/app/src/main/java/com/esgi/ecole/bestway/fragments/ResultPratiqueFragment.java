@@ -13,6 +13,8 @@ import com.esgi.ecole.bestway.adapters.ResultAdapter;
 import com.esgi.ecole.bestway.models.Trajet;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,21 +49,19 @@ public class ResultPratiqueFragment extends Fragment {
 
     public void populateList(){
 
-        Trajet trajet1 = new Trajet("20 mn" , 3);
-        Trajet trajet2 = new Trajet("25 mn" , 4);
-        Trajet trajet3 = new Trajet("30 mn" , 2);
-        Trajet trajet4 = new Trajet("25 mn" , 5);
-        Trajet trajet5 = new Trajet("45 mn" , 1);
+        ArrayList<Trajet> trajets =  getArguments().getParcelableArrayList("trajets");
 
-        ArrayList<Trajet> trajetsList = new ArrayList<>();
-        trajetsList.add(trajet1);
-        trajetsList.add(trajet2);
-        trajetsList.add(trajet3);
-        trajetsList.add(trajet4);
-        trajetsList.add(trajet5);
+        if (trajets != null) {
+            Collections.sort(trajets, new Comparator<Trajet>() {
+                @Override
+                public int compare(Trajet t1, Trajet t2) {
+                    return t1.getPraticalIndex() - t2.getPraticalIndex();
+                }
+            });
+        }
 
         adapter = new ResultAdapter(getContext());
-        adapter.addItemsCollection(trajetsList);
+        adapter.addItemsCollection(trajets);
 
         resultListView.setAdapter(adapter);
 

@@ -1,6 +1,8 @@
 package com.esgi.ecole.bestway.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -136,11 +138,25 @@ public class PreferencesActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 Log.e("choices" , choices.toString());
+                saveChoices();
                 Intent i = new Intent(PreferencesActivity.this , MainActivity.class);
                 startActivity(i);
             }
         });
 
     }
+
+
+    private void saveChoices(){
+
+        SharedPreferences.Editor editor = getSharedPreferences("Choices", Context.MODE_PRIVATE).edit();
+        String finalString = choices.toString().replace(" ","").replace("[","").replace( "]" , "");
+
+        editor.putString("Choices",finalString);
+
+        editor.apply();
+
+    }
+
 
 }

@@ -40,7 +40,7 @@ public class ResultEcologieFragment extends Fragment {
     }
 
     public void populateList(){
-
+/*
         Trajet trajet1 = new Trajet("45 mn" , 1);
         Trajet trajet2 = new Trajet("30 mn" , 2);
         Trajet trajet3 = new Trajet("20 mn" , 3);
@@ -58,7 +58,7 @@ public class ResultEcologieFragment extends Fragment {
         adapter.addItemsCollection(trajetsList);
 
         resultListView.setAdapter(adapter);
-
+*/
     }
 
 }

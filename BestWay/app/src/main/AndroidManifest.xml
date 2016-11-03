@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.esgi.ecole.bestway">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,12 +14,11 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBwTQn3nShmP_8SrVsouvrb0ZcrJ8tlKmY"/>
-        
-        <activity android:name=".activities.MainActivity"></activity>
+            android:value="AIzaSyBwTQn3nShmP_8SrVsouvrb0ZcrJ8tlKmY" />
+
+        <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,8 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ResulatActivity"></activity>
-        <activity android:name=".activities.PreferencesActivity">
+        <activity android:name=".activities.ResulatActivity" />
+        <activity android:name=".activities.PreferencesActivity"></activity>
+        <activity android:name=".activities.InscriptionActivity">
+
         </activity>
     </application>
 

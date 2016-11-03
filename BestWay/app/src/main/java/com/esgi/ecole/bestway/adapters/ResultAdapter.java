@@ -72,7 +72,7 @@ public class ResultAdapter extends BaseAdapter {
         } else {
             holder = (ResultViewHolder) convertView.getTag();
         }
-        holder.tempsTextView.setText(currentItem.getTemps());
+        holder.tempsTextView.setText(currentItem.getDuration()+"");
 
         if(position==0) {
             holder.tempsTextView.setTypeface(null, Typeface.BOLD);
