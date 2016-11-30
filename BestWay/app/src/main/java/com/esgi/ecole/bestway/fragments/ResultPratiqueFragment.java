@@ -44,7 +44,7 @@ public class ResultPratiqueFragment extends Fragment {
 
 
     public void assignViews(View view){
-        resultListView = (ListView) view.findViewById(R.id.listViewResultTemp);
+        resultListView = (ListView) view.findViewById(R.id.listViewResultPratique);
     }
 
     public void populateList(){
@@ -59,7 +59,7 @@ public class ResultPratiqueFragment extends Fragment {
                 }
             });
         }
-
+        Collections.reverse(trajets);
         adapter = new ResultAdapter(getContext());
         adapter.addItemsCollection(trajets);
 

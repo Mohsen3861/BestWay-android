@@ -55,7 +55,7 @@ public class ResultTempsFragment extends Fragment {
             Collections.sort(trajets, new Comparator<Trajet>() {
                 @Override
                 public int compare(Trajet t1, Trajet t2) {
-                    return t1.getDurationIndex() - t2.getDurationIndex();
+                    return t1.getDuration() - t2.getDuration();
                 }
             });
         }

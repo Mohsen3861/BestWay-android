@@ -68,6 +68,10 @@ public class InscriptionActivity extends AppCompatActivity {
             }
         });
 
+
+        getSupportActionBar().hide();
+
+
     }
 
     private void assignViews(){
@@ -77,21 +81,8 @@ public class InscriptionActivity extends AppCompatActivity {
     }
 
 
-    /*
-
-    {
-  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0Nzg1NjIzMjQzMjV9.2c8d5Sm_wMAYm1-5KA1LznKmztB4PIHykNXeHt19n1c",
-  "expires": 1478562324325,
-  "user": {
-    "__v": 0,
-    "email": "aaa@gmail.com",
-    "password": "aaa",
-    "_id": "5817d7940fd4390001055bdf"
-  }
-}
 
 
-     */
     private void registerUser(){
         String email = emailEditText.getText().toString();
         String mdp = passwordEditText.getText().toString();

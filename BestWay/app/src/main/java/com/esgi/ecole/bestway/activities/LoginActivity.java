@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.esgi.ecole.bestway.R;
 import com.esgi.ecole.bestway.commun.BestWayClient;
@@ -68,6 +69,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        getSupportActionBar().hide();
+      //  getActionBar().hide();
     }
 
     public void assignViews(){
@@ -88,6 +92,9 @@ public class LoginActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.add("email",email);
         params.add("password",mdp);
+
+
+
 
         BestWayClient.post(url, params  , new JsonHttpResponseHandler(){
             @Override
@@ -119,6 +126,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 Log.e("ERROR","REGISTER");
+
+                Toast.makeText(LoginActivity.this,"Votre identifiant ou mdp est incorrect ! ",Toast.LENGTH_LONG).show();
 
             }
         });

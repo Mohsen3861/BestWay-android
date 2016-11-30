@@ -3,20 +3,28 @@ package com.esgi.ecole.bestway.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by mohsen raeisi on 07/09/2016.
  */
+
+
 public class Trajet implements Parcelable{
-   private int duration;
-   private int type;
-    private int durationIndex;
+
+    private int duration;
+    private int type;
     private int praticalIndex;
+    private int grade;
+    private ArrayList<Line> lines;
+
 
     public Trajet() {
     }
 
-    public Trajet(int duration, String type, int durationIndex, int praticalIndex) {
+    public Trajet(int duration, String type, int grade, int praticalIndex, ArrayList<Line> lines) {
         this.duration = duration;
+        this.lines = lines;
         switch (type){
             case "walking":
                 this.type = 1;
@@ -27,14 +35,25 @@ public class Trajet implements Parcelable{
             case "subway":
                 this.type = 3;
                 break;
+
             case "bus":
                 this.type = 4;
                 break;
             case "driving":
                 this.type = 5;
                 break;
+
+            case "train":
+                this.type = 6;
+                break;
+            case "tram":
+                this.type = 7;
+                break;
+            default:
+                break;
+
         }
-        this.durationIndex = durationIndex;
+        this.grade = grade;
         this.praticalIndex = praticalIndex;
     }
 
@@ -54,20 +73,28 @@ public class Trajet implements Parcelable{
         this.type = type;
     }
 
-    public int getDurationIndex() {
-        return durationIndex;
-    }
-
-    public void setDurationIndex(int durationIndex) {
-        this.durationIndex = durationIndex;
-    }
-
     public int getPraticalIndex() {
         return praticalIndex;
     }
 
     public void setPraticalIndex(int praticalIndex) {
         this.praticalIndex = praticalIndex;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public ArrayList<Line> getLines() {
+        return lines;
+    }
+
+    public void setLines(ArrayList<Line> lines) {
+        this.lines = lines;
     }
 
     @Override
@@ -79,7 +106,7 @@ public class Trajet implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.duration);
         dest.writeInt(this.type);
-        dest.writeInt(this.durationIndex);
+        dest.writeInt(this.grade);
         dest.writeInt(this.praticalIndex);
 
     }
@@ -102,7 +129,7 @@ public class Trajet implements Parcelable{
     public Trajet(Parcel in) {
         this.duration = in.readInt();
         this.type = in.readInt();
-        this.durationIndex = in.readInt();
+        this.grade = in.readInt();
         this.praticalIndex = in.readInt();
 
     }

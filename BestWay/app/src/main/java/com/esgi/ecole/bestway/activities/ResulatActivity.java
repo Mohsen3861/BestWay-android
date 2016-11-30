@@ -1,5 +1,6 @@
 package com.esgi.ecole.bestway.activities;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,8 @@ import com.esgi.ecole.bestway.commun.BestWayClient;
 import com.esgi.ecole.bestway.fragments.ResultEcologieFragment;
 import com.esgi.ecole.bestway.fragments.ResultPratiqueFragment;
 import com.esgi.ecole.bestway.fragments.ResultTempsFragment;
+import com.esgi.ecole.bestway.models.Line;
+import com.esgi.ecole.bestway.models.LineSubway;
 import com.esgi.ecole.bestway.models.Session;
 import com.esgi.ecole.bestway.models.Trajet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -23,10 +26,12 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class ResulatActivity extends AppCompatActivity {
 
@@ -36,6 +41,7 @@ public class ResulatActivity extends AppCompatActivity {
     private String arr = "";
     private String dep ="";
     private String choices ="";
+    ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +54,13 @@ public class ResulatActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
+        setTitle("Resultats");
+
+
+         progress = new ProgressDialog(this);
+        progress.setTitle("Chargement");
+        progress.setCancelable(false);
+        progress.show();
         FindBestWay();
 
 
@@ -64,21 +77,38 @@ public class ResulatActivity extends AppCompatActivity {
     private void FindBestWay(){
         String url = BestWayClient.BASE_URL + BestWayClient.CALCUL;
 
-        RequestParams requestParams = new RequestParams();
-
-        requestParams.add("dep",dep);
-        requestParams.add("arr",arr);
-        requestParams.add("transp",choices);
 
         Session session = BestWayClient.getSession(this);
+        StringEntity entity = null;
+        try {
 
-        BestWayClient.getWithSession(url,session,requestParams,new JsonHttpResponseHandler(){
+            String json = " {\n" +
+                    "    \"departure\": {\n" +
+                    "        \"latitude\": \""+dep.split(",")[0]+"\",\n" +
+                    "        \"longitude\": \""+dep.split(",")[1]+"\"\n" +
+                    "    },\n" +
+                    "    \"arrival\": {\n" +
+                    "        \"latitude\": \""+arr.split(",")[0]+"\",\n" +
+                    "        \"longitude\": \""+arr.split(",")[1]+"\"\n" +
+                    "    }\n" +
+                    "}";
+             entity = new StringEntity(json);
+
+            Log.e("Json : " ,json );
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        BestWayClient.postWithSession(this,url,entity,session,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 ArrayList<Trajet> trajets =  parseResponseTrajets(response);
                 Log.e("SUCCES",response.toString());
                 initIHM(trajets);
+
+                progress.dismiss();
+
             }
 
             @Override
@@ -98,17 +128,48 @@ public class ResulatActivity extends AppCompatActivity {
         try {
             JSONObject resp = response.getJSONObject("response");
             if(resp!=null){
-                JSONArray trajetsArray = resp.getJSONArray("responseArray");
+                JSONArray trajetsArray = resp.getJSONArray("transportsArray");
                 if(trajetsArray!=null){
                     for (int i = 0 ; i < trajetsArray.length();i++){
                         JSONObject trajetObject = trajetsArray.getJSONObject(i);
 
+
                         Trajet trajet = new Trajet(Integer.parseInt(trajetObject.getString("duration")),
                                 trajetObject.getString("transport"),
-                                Integer.parseInt(trajetObject.getString("durationIndex")),
-                                Integer.parseInt(trajetObject.getString("praticalIndex")));
+                                Integer.parseInt(trajetObject.getString("grade")),
+                                Integer.parseInt(trajetObject.getString("practicalIndex")),
+                                null);
 
 
+
+                        JSONArray linesList  = trajetObject.getJSONArray("lines");
+                        ArrayList<Line> lines = new ArrayList<>();
+                        for (int j = 0 ; j < linesList.length();j++) {
+
+                            JSONObject lineObject = linesList.getJSONObject(j);
+
+                            if(trajetObject.get("transport").equals("bus") || trajetObject.get("transport").equals("train")){
+                                Line line =  new Line();
+                                line.setNumber(lineObject.getString("number"));
+                                line.setVehicle(lineObject.getString("vehicle"));
+
+                                lines.add(line);
+                            }else if(trajetObject.get("transport").equals("subway")){
+                                LineSubway line =  new LineSubway();
+                                line.setNumber(lineObject.getString("number"));
+                                line.setVehicle(lineObject.getString("vehicle"));
+                                line.setSlug(lineObject.getString("slug"));
+                                line.setTitle(lineObject.getString("title"));
+                                line.setMessage(lineObject.getString("message"));
+
+                                lines.add(line);
+                            }
+
+
+                        }
+
+
+                        trajet.setLines(lines);
                         trajets.add(trajet);
                     }
                 }
